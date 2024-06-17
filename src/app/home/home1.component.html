@@ -1,0 +1,67 @@
+<form #singUpForm="ngForm" (ngSubmit)="onSubmit(singUpForm)">
+    <p>
+      <label for="firstname">First Name</label>
+      <input type="text" #fnameref="ngModel" name="firstName"  minlength="3"  ngModel required/>
+    </p>
+    @if (fnameref?.touched) {
+        @if(fnameref.errors?.["required"]){
+            <p >This field is required</p>
+            <p>{{fnameref.errors | json}} </p>
+        }
+        @if(fnameref.hasError('minlength')){
+            <p>This field must be longer than
+                {{fnameref.errors | json}}    
+            </p>
+        }
+    }
+    
+    <p>
+        <strong>Valid ? </strong>{{singUpForm.form.controls['firstName']?.valid}} <br>
+        <strong>Invalid ? </strong>{{singUpForm.form.controls['firstName']?.invalid}}<br>
+        <strong>Touched ? </strong>{{singUpForm.form.controls['firstName']?.touched}}<br>
+        <strong>Untouched ? </strong>{{singUpForm.form.controls['firstName']?.untouched}}<br>
+        <strong>Dirty ? </strong>{{singUpForm.form.controls['firstName']?.dirty}}<br>
+        <strong>Pristine ? </strong>{{singUpForm.form.controls['firstName']?.pristine}}<br>
+    </p>
+   
+    <p>
+      <label for="lastname">Last Name</label>
+      <input type="text" #lnameref="ngModel" name="lastname" ngModel required/>
+    </p>
+    @if (lnameref?.touched) {
+        @if (lnameref.hasError("required")) {
+            <p >This field is required</p>
+        }
+    }
+  
+    <p>
+      <label for="email">Email </label>
+      <input type="email" #emailref="ngModel" id="email" name="email" ngModel email pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"/>
+    </p>
+    @if (emailref.errors != null) {
+        <p >This field is invalid</p>
+    }
+    {{emailref.errors | json}}
+    <p> 
+      <label for="gender">Geneder</label>
+      <input type="radio" value="male" name="gender" ngModel /> Male
+      <input type="radio" value="female" name="gender" ngModel /> Female
+    </p>
+  
+    <p>
+      <label for="isMarried">Married</label>
+      <input type="checkbox" name="isMarried" ngModel />
+    </p>
+  
+    <select name="country" ngModel>
+      @for (c of countryList; track $index) {
+      <option [value]="c.id">
+        {{ c.name }}
+      </option>
+      }
+    </select>
+  
+    <p>
+      <button type="submit" [disabled]="fnameref.invalid || lnameref.invalid || emailref.invalid">Submit</button>
+    </p>
+  </form>
